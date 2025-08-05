@@ -24,12 +24,9 @@ class List:
         if item < 0 or item >= self.size:
             raise IndexError("Index out of range")
         current = self.head
-        count = 0
-        while item is not None:
-            if count == item:
-                return current
-            count += 1
+        for i in range(item):
             current = current.next
+        return current.current
                         
     def len(self) -> int:
         return self.size
@@ -57,15 +54,16 @@ class List:
         
 
             
-    
-new_list = List()
-new_list.append(2)
-new_list.append(5)
-new_list.append(8)
-new_list.append(17)
-print(new_list.show())
-print(new_list.len())
-new_list.insert(0, 99)
-new_list.insert(2, 99)
-print(new_list.show())
-print(new_list.len())
+if __name__ == '__main__':
+    new_list = List()
+    new_list.append(2)
+    new_list.append(5)
+    new_list.append(8)
+    new_list.append(17)
+#    print(new_list.get(1))
+    print(new_list.show())
+    print(new_list.len())
+#    new_list.insert(0, 99)
+#    new_list.insert(2, 99)
+#    print(new_list.show())
+#    print(new_list.len())
