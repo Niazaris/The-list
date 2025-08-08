@@ -19,7 +19,7 @@ def test_append_and_printing(lists):
         m_list.append(i)
         p_list.append(i)
         
-    assert print(m_list) == print(p_list)
+    assert str(m_list) == str(p_list)
     # make error handling for incorrect inputs
 
 def test_insert(lists):
@@ -27,51 +27,47 @@ def test_insert(lists):
     
     m_list.insert(3, 15)
     p_list.insert(3, 15)
-    assert print(m_list) == print(p_list)
+    assert str(m_list) == str(p_list)
     
     m_list.insert(0, "slaanesh")
     p_list.insert(0, "slaanesh")
-    assert print(m_list) == print(p_list)
+    assert str(m_list) == str(p_list)
     
     m_list.insert(-2, "slaanesh")
     p_list.insert(-2, "slaanesh")
-    assert print(m_list) == print(p_list)
+    assert str(m_list) == str(p_list)
     
     m_list.insert(150, 66)
     p_list.insert(150, 66)
-    assert print(m_list) == print(p_list)
+    assert str(m_list) == str(p_list)
     
     m_list.insert(-150, 99)
     p_list.insert(-150, 99)
-    assert print(m_list) == print(p_list)
+    assert str(m_list) == str(p_list)
     
     with pytest.raises(TypeError):
         m_list.insert("a", 5)
     with pytest.raises(TypeError):
         p_list.insert("a", 5)
-               
-    # check if more error handling is needed
         
 def test_remove(lists):
     m_list, p_list = lists
     
     m_list.remove(69)
     p_list.remove(69)
-    assert print(m_list) == print(p_list)
+    assert str(m_list) == str(p_list)
 
     m_list.append('slaanesh')
     p_list.append('slaanesh')
     
     m_list.remove('slaanesh')
     p_list.remove('slaanesh')
-    assert print(m_list) == print(p_list)
+    assert str(m_list) == str(p_list)
     
     with pytest.raises(ValueError):
         m_list.remove(9999)
     with pytest.raises(ValueError):
         m_list.remove(9999)
-        
-    # check if more error handling is needed
     
 def test_clear(lists):
     m_list, p_list = lists
@@ -79,13 +75,13 @@ def test_clear(lists):
     m_list.clear()
     p_list.clear()
     
-    assert print(m_list) == print(p_list)
+    assert str(m_list) == str(p_list)
     
 def test_pop(lists):
     m_list, p_list = lists
     
     assert m_list.pop(2) == p_list.pop(2)   
-    assert print(m_list) == print(p_list)
+    assert str(m_list) == str(p_list)
     
     with pytest.raises(TypeError):
         m_list.pop("a")
@@ -108,7 +104,7 @@ def test_pop(lists):
 def test_reverse(lists):
     m_list, p_list = lists
     
-    assert print(m_list.reverse()) == print(p_list.reverse())
+    assert str(m_list.reverse()) == str(p_list.reverse())
     
 def test_extend(lists):
     m_list, p_list = lists
@@ -117,14 +113,12 @@ def test_extend(lists):
     m_list.extend(e_list)
     p_list.extend(e_list)
     
-    assert print(m_list) == print(p_list)
+    assert str(m_list) == str(p_list)
     
     with pytest.raises(TypeError):
         m_list.extend(55)
     with pytest.raises(TypeError):
         p_list.extend(55)
-        
-    # check if more error handling is needed
     
 def test_index(lists):
     m_list, p_list = lists
@@ -138,8 +132,14 @@ def test_index(lists):
     assert m_list.index(69, 5) == p_list.index(69, 5)
     assert m_list.index(69, 2, 7) == p_list.index(69, 2, 7)
     assert m_list.index(69, 3, -1) == p_list.index(69, 3, -1)
-    assert m_list.index(69, -6, -1) == p_list.index(69, -6, -1)  
-
+    assert m_list.index(69, -6, -1) == p_list.index(69, -6, -1)
+    assert m_list.index(69, 1, 99) == p_list.index(69, 1, 99)
+    
+    with pytest.raises(ValueError):
+        m_list.index(69, 99, -1)        
+    with pytest.raises(ValueError):
+        m_list.index(69, 99, -1)
+        
     with pytest.raises(TypeError):
         m_list.index(69, "a", 6)
     with pytest.raises(TypeError):
@@ -149,11 +149,6 @@ def test_index(lists):
         m_list.index(69, 1, "a")
     with pytest.raises(TypeError):
         p_list.index(69, 1, "a")
-        
-    #with pytest.raises(IndexError):  #fix no error for start and end above size 
-    #    m_list.index(69, 1, 67)
-    #with pytest.raises(IndexError):
-    #    p_list.index(69, 1, 67)
     
 def test_count(lists):
     m_list, p_list = lists
@@ -171,14 +166,29 @@ def test_copy(lists):
     new_m_list = m_list.copy()
     new_p_list = p_list.copy()
     
-    assert print(new_m_list) == print(new_p_list)
+    assert str(new_m_list) == str(new_p_list)
     
-def test_slice(lists):
+def test_get(lists):
     m_list, p_list = lists
     
-    assert print(m_list[2::]) == print(p_list[2::])
-    assert print(m_list[1:4:]) == print(p_list[1:4:])
-    assert print(m_list[1:5:2]) == print(p_list[1:5:2])
+    assert str(m_list[2]) == str(p_list[2])
+    
+    assert str(m_list[2::]) == str(p_list[2::])
+    assert str(m_list[1:4:]) == str(p_list[1:4:])
+    assert str(m_list[1:5:2]) == str(p_list[1:5:2])
+    assert str(m_list[-5:-1:]) == str(p_list[-5:-1:])
+    # assert str(m_list[1:8:-1]) == str(p_list[1:8:-1])
+    
+    with pytest.raises(IndexError):
+        m_list[100]
+    with pytest.raises(IndexError):
+        p_list[100]
+    
+    with pytest.raises(ValueError):
+        m_list[::0]
+    with pytest.raises(ValueError):
+        p_list[::0]
+        
 
     
 if __name__ == '__main__':

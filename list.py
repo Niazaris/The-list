@@ -17,10 +17,10 @@ class List:
             current = current.next
         
     def __str__(self) -> str:
-        return f"[{', '.join(repr(current) for (current) in self)}]"
+        return f"[{', '.join(repr(current) for current in self)}]"
         
     def __repr__(self):
-        return self_._str__()
+        return self._str__()
                 
     def append(self, item: Any) -> None:
         new_node = _Node(item)
@@ -116,13 +116,6 @@ class List:
         if start < 0:
             start += self._size
             
-        if not isinstance(start, int):
-            raise TypeError("start must be an integer")            
-        if start < 0 or start > self._size:
-            raise IndexError("start index out of range")                
-        if end < 0 or end > self._size:
-            raise IndexError("end index out of range")
-            
         current = self._head
         current_position = 0
         while current:
@@ -131,6 +124,8 @@ class List:
                     return current_position
             current = current.next
             current_position += 1
+        
+        raise ValueError("Value in not in list")
             
     def extend(self, iterable: Iterable[Any]) -> None:
         if not isinstance(iterable, Iterable):
@@ -162,12 +157,16 @@ class List:
     def __len__(self) -> int:
         return self._size
         
-    def __getitem__(self, item):
+    def __getitem__(self, item: "int | slice") -> Any:
         if isinstance(item, slice):
             start, end, step = item.indices(self._size)
             result = List()
             current = self._head
             current_position = 0
+            
+            if step == 0:
+                raise ValueError("Slice step cannot be zero")
+                
             while current:
                 if current_position >= start and current_position < end:
                     if (current_position - start) % step == 0:
@@ -176,18 +175,21 @@ class List:
                     break
                 current = current.next
                 current_position += 1
+             
             return result
+                
         elif isinstance(item, int):
-            if not isinstance(item, int):
-                raise TypeError("Item must be an integer")
             if item < 0:
-                item += self._size
+                item += self._size                
             if item < 0 or item >= self._size:
                 raise IndexError("Index out of range")
             current = self._head
+            
             for i in range(item):
                 current = current.next
             return current.current
+        else:
+            raise TypeError("Item must be int or slice")
         
     def __setitem__(self, position: int, item: Any) -> None:
         if not isinstance(position, int):
@@ -197,6 +199,7 @@ class List:
         if position < 0 or position >= self._size:
             raise IndexError("Index out of range")
         current = self._head
+        
         for i in range(position):
             current = current.next
         current.current = item
@@ -211,6 +214,7 @@ class List:
             
         current = self._head
         previous = None
+        
         for i in range(position):
             previous = current
             current = current.next
@@ -219,4 +223,3 @@ class List:
         else:
             self._head = current.next
         self._size -= 1
-            
